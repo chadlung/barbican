@@ -22,12 +22,14 @@ fi
 
 echo "Successfully contacted the Barbican (non-admin) API"
 
-if ! timeout ${API_RESPONDING_TIMEOUT} sh -c "while ! curl -s http://127.0.0.1:9312/ -HX-Project-Id:123 2>/dev/null | grep -q 'v1' ; do sleep 1; done"; then
-    echo "The Barbican (admin) API failed to respond within ${API_RESPONDING_TIMEOUT} seconds"
-    exit 1
-fi
+# TODO(chadlung): This service will need to be enabled in the future
+# once the Barbican Admin piece is being used
+#if ! timeout ${API_RESPONDING_TIMEOUT} sh -c "while ! curl -s http://127.0.0.1:9312/ 2>/dev/null | grep -q 'v1' ; do sleep 1; done"; then
+#    echo "The Barbican (admin) API failed to respond within ${API_RESPONDING_TIMEOUT} seconds"
+#    exit 1
+#fi
 
-echo "Successfully contacted the Barbican (admin) API"
+#echo "Successfully contacted the Barbican (admin) API"
 
 # Where tempest code lives
 TEMPEST_DIR=${TEMPEST_DIR:-/opt/stack/new/tempest}

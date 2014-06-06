@@ -146,7 +146,6 @@ function install_barbican {
     ERROR_ON_CLONE=False
     git_clone $BARBICAN_REPO $BARBICAN_DIR $BARBICAN_BRANCH
     setup_develop $BARBICAN_DIR
-    pip_install 'uwsgi'
 }
 
 # install_barbicanclient - Collect source and prepare
@@ -159,19 +158,18 @@ function install_barbicanclient {
 
 # start_barbican - Start running processes, including screen
 function start_barbican {
-    screen_it barbican "uwsgi --master --emperor $BARBICAN_CONF_DIR/vassals"
+    screen_it barbican "python $BARBICAN_DIR/bin/barbican_devstk_api.py"
+    # TODO(chadlung): This service will need to be enabled in the future
+    # once the Barbican Admin piece is being used
+    # screen_it barbicanadmin "python $BARBICAN_DIR/bin/barbican_devstk_admin.py"
 }
 
 # stop_barbican - Stop running processes
 function stop_barbican {
-    # This will eventually be refactored to work like
-    # Solum and Manila (script to kick off a wsgiref server)
-    # For now, this will stop uWSGI rather than have it hang
-    killall -9 uwsgi
-
-    # This cleans up the PID file, but uses pkill so Barbican
-    # uWSGI emperor process doesn't actually stop
     screen_stop barbican
+    # TODO(chadlung): This service will need to be enabled in the future
+    # once the Barbican Admin piece is being used
+    # screen_stop barbicanadmin
 }
 
 function create_barbican_accounts {
